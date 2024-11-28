@@ -8,27 +8,27 @@ import SettingsPage from '@/views/SettingsPage.vue';
 const routes = [
   {
     path: '/',
-    name: 'Login',
+    name: 'LoginPage',
     component: LoginPage,
   },
   {
     path: '/map',
-    name: 'Map',
+    name: 'MapPage',
     component: MapPage,
   },
   {
     path: '/community',
-    name: 'Community',
+    name: 'CommunityPage',
     component: CommunityPage,
   },
   {
     path: '/help',
-    name: 'Help',
+    name: 'HelpPage',
     component: HelpPage,
   },
   {
     path: '/settings',
-    name: 'Settings',
+    name: 'SettingsPage',
     component: SettingsPage,
   },
 ];

@@ -11,7 +11,7 @@ const route = useRoute(); // 獲取當前路由
   <RouterView />
 
   <!-- 如果當前路由不是 Login，則顯示底部導航欄 -->
-  <BottomNav v-if="route.name !== 'Login'" />
+  <BottomNav v-if="route.name !== 'LoginPage'" />
 </template>
 
 <style scoped>
