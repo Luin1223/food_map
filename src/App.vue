@@ -7,12 +7,25 @@ const route = useRoute(); // 獲取當前路由
 </script>
 
 <template>
-  <!-- 渲染當前頁面 -->
-  <RouterView />
+  <!-- 主內容區域 -->
+  <div class="app-content pb-16">
+    <RouterView />
+  </div>
 
-  <!-- 如果當前路由不是 Login，則顯示底部導航欄 -->
+  <!-- 固定的底部導航欄 -->
   <BottomNav v-if="route.name !== 'LoginPage'" />
 </template>
 
 <style scoped>
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+.app-content {
+  overflow-y: auto;
+  max-height: calc(100% - 4rem); /* 將高度限制為螢幕高度減去導航欄高度 */
+}
 </style>
