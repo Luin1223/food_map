@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <h1>Community Page</h1>
+  <div class="flex flex-row justify-between items-center border-b-2 py-2">
+  <PhPlusCircle :size="24" />
+  <PhUsers :size="24" />
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CommunityPage',
-};
+<script setup>
+import {PhPlusCircle,PhUsers} from "@phosphor-icons/vue";
 </script>
 
 <style scoped>

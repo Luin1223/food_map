@@ -15,5 +15,4 @@ const route = useRoute(); // 獲取當前路由
 </template>
 
 <style scoped>
-/* 你可以在這裡根據需要定義樣式 */
 </style>
