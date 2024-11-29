@@ -4,6 +4,7 @@ import HelpPage from '@/views/HelpPage.vue';
 import MapPage from '@/views/MapPage.vue';
 import CommunityPage from '@/views/CommunityPage.vue';
 import SettingsPage from '@/views/SettingsPage.vue';
+import AddPostPage from '@/views/AddPostPage.vue';
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/settings',
     name: 'SettingsPage',
     component: SettingsPage,
+  },
+  {
+    path: '/addpost',
+    name: 'AddPostPage',
+    component: AddPostPage,
   },
 ];
 

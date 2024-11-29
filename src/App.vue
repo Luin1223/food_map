@@ -4,6 +4,8 @@ import BottomNav from '@/components/BottomNav.vue'; // 引入底部導航欄
 import { useRoute } from 'vue-router'; // 引入 useRoute
 
 const route = useRoute(); // 獲取當前路由
+
+const noBottonNav = ['LoginPage','AddPostPage'];
 </script>
 
 <template>
@@ -13,7 +15,7 @@ const route = useRoute(); // 獲取當前路由
   </div>
 
   <!-- 固定的底部導航欄 -->
-  <BottomNav v-if="route.name !== 'LoginPage'" />
+  <BottomNav v-if="!noBottonNav.includes(route.name)" />
 </template>
 
 <style scoped>
