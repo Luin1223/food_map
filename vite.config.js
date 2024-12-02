@@ -12,5 +12,9 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    host: true, // 允許區域網路訪問
+    port: 3000  // 設置你希望使用的端口
   }
 })

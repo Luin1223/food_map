@@ -51,9 +51,21 @@
         </div>
         <div class="flex flex-row justify-between py-1 border-b border-gray-300">
           <div class="flex flex-row">
-            <PhHeart :size="20" />
+            <button @click="toggleLike" class="flex items-center">
+              <PhHeart
+                :size="20"
+                :weight="isLiked ? 'fill' : 'regular'"
+                :style="{ color: isLiked ? '#CA2521' : 'inherit' }"
+              />
+            </button>
             <PhChatCircle :size="20" class="ml-2" />
-            <PhBookmarkSimple :size="20" class="ml-2" />
+            <button @click="togglecollect" class="flex items-center">
+              <PhBookmarkSimple 
+              :size="20" class="ml-2"
+              :weight="isCollect ? 'fill' : 'regular'"
+              :style="{color:isLiked ? '#000000' : 'inherit' }"
+            />
+            </button>
           </div>
           <PhExport :size="20" />
         </div>
@@ -86,6 +98,16 @@ const activeButton = ref('recommend'); // 初始狀態為「熱門推薦」
 const setActive = (button) => {
   activeButton.value = button; // 將點擊的按鈕設置為激活狀態
 };
+
+const isLiked = ref(false);
+const isCollect = ref(false);
+
+const toggleLike = () => {
+  isLiked.value = !isLiked.value;
+};
+const togglecollect = () => {
+  isCollect.value = !isCollect.value;
+}
 </script>
 
 <style scoped>

@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <p>Settings Page</p>
+  <div class="flex flex-col justify-center items-center py-2 border-b border-gray-300">
+  <p class="w-full text-center">設定</p>   
+  </div>
+  <div class="flex flex-col justify-center items-center py-2 border-b border-gray-300">
+  <img src="/images/頭像.jpg" class="rounded-full py-2" style="width: 150px; height: 150px;" /> 
+  <p class="text-lg">未登入</p>
   </div>
 </template>
 
-<script>
+<script setup>
 
 </script>
 
