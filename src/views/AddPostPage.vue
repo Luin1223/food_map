@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col">
-  <div class="flex flex-row items-center py-2 border-b border-gray-300">
+  <div class="flex flex-row justify-center items-center py-2 border-b border-gray-300">
     <router-link to="/community">
     <PhCaretLeft :size="24" />
     </router-link>
-    <p>新增貼文</p>
+    <p class="w-full text-center">新增貼文</p>
   </div>
+  <div class="flex">
   <input type="text" placeholder="Type here" class="input input-ghost w-full max-w-xs" />
   </div>
 </template>

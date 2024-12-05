@@ -1,43 +1,20 @@
 <template>
-  <div>
-    <!-- 上方導航欄 -->
-    <div class="flex flex-row justify-between items-center py-2 border-b border-gray-300">
-      <router-link to="/addpost">
-      <PhPlusCircle :size="24" />
-      </router-link>
-      <router-link to="/profile">
-      <PhUsers :size="24" />
-      </router-link>
-    </div>
-
-    <!-- 按鈕切換區 -->
-    <div class="flex flex-row justify-around items-center py-4">
-      <button
-        @click="setActive('recommend')"
-        :class="[
-          'p-1 w-28 rounded-lg shadow-md',
-          activeButton === 'recommend' ? 'bg-[#DFDFDF]' : 'bg-[#EFEFF1]'
-        ]"
-      >
-        熱門推薦
-      </button>
-
-      <button
-        @click="setActive('follow')"
-        :class="[
-          'p-1 w-28 rounded-lg shadow-md',
-          activeButton === 'follow' ? 'bg-[#DFDFDF]' : 'bg-[#EFEFF1]'
-        ]"
-      >
-        我的追蹤
-      </button>
-    </div>
-
-    <!-- 視圖內容區 -->
-    <div>
-      <!-- 熱門推薦內容 -->
-      <div v-if="activeButton === 'recommend'">
-        <div class="flex flex-row">
+  <div class="flex flex-row justify-center items-center py-2 border-b border-gray-300">
+    <router-link to="/community">
+    <PhCaretLeft :size="24" />
+    </router-link>
+  <p class="w-full text-center">個人檔案</p>   
+  </div>
+  <div class="flex flex-row justify-around items-center py-2 border-b border-gray-300">
+  <img src="/images/頭像.jpg" class="rounded-full py-2" style="width: 150px; height: 150px;" /> 
+  <div class="flex flex-col justify-start items-center">
+    <p class="text-2xl">張茹茵</p>
+    <p>粉絲 0  追蹤  20  讚  0  收藏 12</p>
+  </div>
+  </div>
+  <div class="flex flex-col">
+    <p class="text-xs py-2 text-gray-500">你的貼文</p>
+    <div class="flex flex-row">
           <img src="/images/頭像.jpg" class="w-10 h-10 rounded-full" />
           <div class="flex flex-col ml-4">
             <p>luin1223</p>
@@ -71,20 +48,12 @@
           </div>
           <PhExport :size="20" />
         </div>
-      </div>
-
-      <!-- 我的追蹤內容 -->
-      <div v-if="activeButton === 'follow'">
-        <p class="text-sm text-gray-600 text-center">尚未追蹤任何用戶。</p>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import {
-  PhPlusCircle,
-  PhUsers,
+  PhCaretLeft,
   PhMapPin,
   PhHeart,
   PhChatCircle,
@@ -92,14 +61,6 @@ import {
   PhExport,
 } from '@phosphor-icons/vue';
 import { ref } from 'vue';
-
-// 設定響應式狀態
-const activeButton = ref('recommend'); // 初始狀態為「熱門推薦」
-
-// 切換按鈕狀態的函數
-const setActive = (button) => {
-  activeButton.value = button; // 將點擊的按鈕設置為激活狀態
-};
 
 const isLiked = ref(false);
 const isCollect = ref(false);
