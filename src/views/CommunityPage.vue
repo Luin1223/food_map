@@ -1,22 +1,22 @@
 <template>
   <div>
     <!-- 上方導航欄 -->
-    <div class="flex flex-row justify-between items-center py-2 border-b border-gray-300">
+    <div class="flex flex-row justify-between p-2 items-center border-b border-gray-300">
       <router-link to="/addpost">
-      <PhPlusCircle :size="24" />
+        <PhPlusCircle :size="24" />
       </router-link>
       <router-link to="/profile">
-      <PhUsers :size="24" />
+        <PhUsers :size="24" />
       </router-link>
     </div>
 
     <!-- 按鈕切換區 -->
-    <div class="flex flex-row justify-around items-center py-4">
+    <div class="flex flex-row justify-around items-center mt-4">
       <button
         @click="setActive('recommend')"
-        :class="[
-          'p-1 w-28 rounded-lg shadow-md',
-          activeButton === 'recommend' ? 'bg-[#DFDFDF]' : 'bg-[#EFEFF1]'
+        :class="[ 
+          'p-1 w-28 rounded-lg shadow-md', 
+          activeButton === 'recommend' ? 'bg-[#DFDFDF]' : 'bg-[#EFEFF1]' 
         ]"
       >
         熱門推薦
@@ -24,9 +24,9 @@
 
       <button
         @click="setActive('follow')"
-        :class="[
-          'p-1 w-28 rounded-lg shadow-md',
-          activeButton === 'follow' ? 'bg-[#DFDFDF]' : 'bg-[#EFEFF1]'
+        :class="[ 
+          'p-1 w-28 rounded-lg shadow-md', 
+          activeButton === 'follow' ? 'bg-[#DFDFDF]' : 'bg-[#EFEFF1]' 
         ]"
       >
         我的追蹤
@@ -34,42 +34,45 @@
     </div>
 
     <!-- 視圖內容區 -->
-    <div>
+    <div class="p-4">
       <!-- 熱門推薦內容 -->
       <div v-if="activeButton === 'recommend'">
-        <div class="flex flex-row">
-          <img src="/images/頭像.jpg" class="w-10 h-10 rounded-full" />
-          <div class="flex flex-col ml-4">
-            <p>luin1223</p>
-            <div class="flex flex-row items-center">
-              <PhMapPin :size="12" :style="{ color: '#CA2521' }" weight="bold" />
-              <p class="text-xs ml-1">700台南市中西區尊王路110號</p>
+        <div v-for="post in posts" :key="post.id" class="post border-b border-gray-300 py-4">
+          <div class="flex flex-row">
+            <img :src="post.user.avatar" class="w-10 h-10 rounded-full" />
+            <div class="flex flex-col ml-4">
+              <p>{{ post.user.username }}</p>
+              <div class="flex flex-row items-center">
+                <PhMapPin :size="12" :style="{ color: '#CA2521' }" weight="bold" />
+                <p class="text-xs ml-1">{{ post.user.location }}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flex flex-col py-2">
-          <p class="text-sm">台南新開美味大漢堡，超好吃，大家快來嘗嘗。</p>
-          <img src="/images/大漢堡.jpg" class="py-2" />
-        </div>
-        <div class="flex flex-row justify-between py-1 border-b border-gray-300">
-          <div class="flex flex-row">
-            <button @click="toggleLike" class="flex items-center">
-              <PhHeart
-                :size="20"
-                :weight="isLiked ? 'fill' : 'regular'"
-                :style="{ color: isLiked ? '#CA2521' : 'inherit' }"
-              />
-            </button>
-            <PhChatCircle :size="20" class="ml-2" />
-            <button @click="togglecollect" class="flex items-center">
-              <PhBookmarkSimple 
-              :size="20" class="ml-2"
-              :weight="isCollect ? 'fill' : 'regular'"
-              :style="{color:isLiked ? '#000000' : 'inherit' }"
-            />
-            </button>
+          <div class="flex flex-col">
+            <p class="text-sm">{{ post.content }}</p>
+            <img :src="post.image" class="py-2 w-full rounded-md" />
           </div>
-          <PhExport :size="20" />
+          <div class="flex flex-row justify-between">
+            <div class="flex flex-row">
+              <button @click="toggleLike(post)" class="flex items-center">
+                <PhHeart
+                  :size="20"
+                  :weight="post.isLiked ? 'fill' : 'regular'"
+                  :style="{ color: post.isLiked ? '#CA2521' : 'inherit' }"
+                />
+              </button>
+              <PhChatCircle :size="20" class="ml-2" />
+              <button @click="toggleCollect(post)" class="flex items-center">
+                <PhBookmarkSimple
+                  :size="20"
+                  class="ml-2"
+                  :weight="post.isCollected ? 'fill' : 'regular'"
+                  :style="{ color: post.isCollected ? '#000000' : 'inherit' }"
+                />
+              </button>
+            </div>
+            <PhExport :size="20" />
+          </div>
         </div>
       </div>
 
@@ -92,24 +95,28 @@ import {
   PhExport,
 } from '@phosphor-icons/vue';
 import { ref } from 'vue';
+import { generateMockData } from '@/utils/mockData.js'; // 引入動態生成的假資料
 
-// 設定響應式狀態
-const activeButton = ref('recommend'); // 初始狀態為「熱門推薦」
+// 使用生成函數生成 10 條假資料
+const posts = ref(generateMockData(10)); // 預設生成 10 條
 
-// 切換按鈕狀態的函數
+// 當前激活的按鈕
+const activeButton = ref('recommend');
+
+// 切換按鈕狀態
 const setActive = (button) => {
-  activeButton.value = button; // 將點擊的按鈕設置為激活狀態
+  activeButton.value = button;
 };
 
-const isLiked = ref(false);
-const isCollect = ref(false);
-
-const toggleLike = () => {
-  isLiked.value = !isLiked.value;
+// 切換按讚狀態
+const toggleLike = (post) => {
+  post.isLiked = !post.isLiked;
 };
-const togglecollect = () => {
-  isCollect.value = !isCollect.value;
-}
+
+// 切換收藏狀態
+const toggleCollect = (post) => {
+  post.isCollected = !post.isCollected;
+};
 </script>
 
 <style scoped>

@@ -10,7 +10,7 @@ const loginAsGuest = () => {
 </script>
 
 <template>
-  <div class="flex flex-col text-center mt-20">
+  <div class="flex flex-col text-center mt-20 p-4">
     <h1 class="flex flex-col justify-center font-bold text-4xl">Login</h1>
     <div class="flex flex-col gap-4 justify-center items-center mt-20">
       <button @click="loginWithGoogle" class="flex justify-center items-center p-3 w-full rounded-full text-base border-2 border-black">

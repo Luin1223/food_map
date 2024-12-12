@@ -1,18 +1,18 @@
 <template>
-  <div class="flex flex-row justify-center items-center py-2 border-b border-gray-300">
-    <router-link to="/community">
-    <PhCaretLeft :size="24" />
+  <div class="flex items-center py-2 border-b border-gray-300 relative">
+    <router-link to="/community" class="absolute left-2">
+      <PhCaretLeft :size="24" />
     </router-link>
-  <p class="w-full text-center">個人檔案</p>   
+    <p class="w-full text-center text-lg">個人檔案</p>
   </div>
-  <div class="flex flex-row justify-around items-center py-2 border-b border-gray-300">
+  <div class="flex flex-row p-4 justify-around items-center py-2 border-b border-gray-300">
   <img src="/images/頭像.jpg" class="rounded-full py-2" style="width: 150px; height: 150px;" /> 
   <div class="flex flex-col justify-start items-center">
     <p class="text-2xl">張茹茵</p>
     <p>粉絲 0  追蹤  20  讚  0  收藏 12</p>
   </div>
   </div>
-  <div class="flex flex-col">
+  <div class="flex flex-col p-4">
     <p class="text-xs py-2 text-gray-500">你的貼文</p>
     <div class="flex flex-row">
           <img src="/images/頭像.jpg" class="w-10 h-10 rounded-full" />

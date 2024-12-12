@@ -2,7 +2,7 @@
   <router-link to="/delicious">
   <PhMagnifyingGlass :size="24" />
   </router-link>
-  <div v-if="apiKey && center" class="mt-4">
+  <div v-if="apiKey && center" class="mt-4 p-2">
     <GoogleMap
       :api-key="apiKey"
       :center="center"

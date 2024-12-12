@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-center items-center py-2 border-b border-gray-300">
-  <p class="w-full text-center">設定</p>   
+  <p class="w-full text-center text-lg">設定</p>   
   </div>
   <div class="flex flex-col justify-center items-center py-2 border-b border-gray-300">
   <img src="/images/頭像.jpg" class="rounded-full py-2" style="width: 150px; height: 150px;" /> 
