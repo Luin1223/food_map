@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Help Page</h1>
+    <h1>好吃好吃</h1>
   </div>
 </template>
 

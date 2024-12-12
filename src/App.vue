@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'; // 引入 useRoute
 
 const route = useRoute(); // 獲取當前路由
 
-const noBottonNav = ['LoginPage','AddPostPage','ProfilePage'];
+const noBottonNav = ['LoginPage','AddPostPage','ProfilePage','DeliciousPage'];
 </script>
 
 <template>

@@ -6,6 +6,7 @@ import CommunityPage from '@/views/CommunityPage.vue';
 import SettingsPage from '@/views/SettingsPage.vue';
 import AddPostPage from '@/views/AddPostPage.vue';
 import ProfilePage from '@/views/ProfilePage.vue';
+import DeliciousPage from '@/views/DeliciousPage.vue';
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/profile',
     name: 'ProfilePage',
     component: ProfilePage,
+  },
+  {
+    path: '/delicious',
+    name: 'DeliciousPage',
+    component: DeliciousPage,
   },
 ];
 
