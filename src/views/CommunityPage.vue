@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- 上方導航欄 -->
-    <div class="flex flex-row justify-between p-2 items-center border-b border-gray-300">
+    <div class="flex flex-row justify-between items-center border-b border-gray-300">
       <router-link to="/addpost">
-        <PhPlusCircle :size="24" />
+        <PhPlusCircle :size="24" class="ml-4" />
       </router-link>
       <router-link to="/profile">
-        <PhUsers :size="24" />
+        <PhUsers :size="24" class="justify-self-end mr-4" />
       </router-link>
     </div>
 
@@ -37,7 +37,11 @@
     <div class="p-4">
       <!-- 熱門推薦內容 -->
       <div v-if="activeButton === 'recommend'">
-        <div v-for="post in posts" :key="post.id" class="post border-b border-gray-300 py-4">
+        <div
+          v-for="post in posts"
+          :key="post.id"
+          class="post border-b border-gray-300 py-4"
+        >
           <div class="flex flex-row">
             <img :src="post.user.avatar" class="w-10 h-10 rounded-full" />
             <div class="flex flex-col ml-4">
@@ -50,9 +54,21 @@
           </div>
           <div class="flex flex-col">
             <p class="text-sm">{{ post.content }}</p>
-            <img :src="post.image" class="py-2 w-full rounded-md" />
+            <!-- 圖片滑動容器 -->
+            <div
+              v-if="post.image.length > 0"
+              class="overflow-x-auto flex gap-2 py-2 scrollbar-hide"
+            >
+              <img
+                v-for="(imgSrc, index) in post.image"
+                :key="index"
+                :src="imgSrc"
+                class="w-40 h-auto rounded-md"
+                :alt="`Post image ${index + 1}`"
+              />
+            </div>
           </div>
-          <div class="flex flex-row justify-between">
+          <div class="flex flex-row justify-between mt-2">
             <div class="flex flex-row">
               <button @click="toggleLike(post)" class="flex items-center">
                 <PhHeart
@@ -120,5 +136,13 @@ const toggleCollect = (post) => {
 </script>
 
 <style scoped>
-/* 可選樣式 */
+/* 自定義滾動條隱藏 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE 11 */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
 </style>

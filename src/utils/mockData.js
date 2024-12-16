@@ -6,16 +6,20 @@ const generateUsername = () =>
   const generateLocation = () =>
     `${Math.floor(Math.random() * 1000)} 台南市中西區示例路`;
   
-  // 隨機選擇圖片
-  const generateImage = () => {
-    const images = [
-      "/images/大漢堡.jpg",
-      "/images/咖啡.jpg",
-      "/images/蛋糕.jpg",
-      "/images/飲料.jpg",
-    ];
-    return images[Math.floor(Math.random() * images.length)];
-  };
+// 隨機選擇多張圖片
+const generateImages = () => {
+  const images = [
+    "/images/大漢堡.jpg",
+    "/images/咖啡.jpg",
+    "/images/蛋糕.jpg",
+    "/images/飲料.jpg",
+  ];
+  const imageCount = Math.floor(Math.random() * 3) + 1; // 隨機 1~3 張
+  return Array.from({ length: imageCount }, () => 
+    images[Math.floor(Math.random() * images.length)]
+  );
+};
+
   
   // 隨機生成內容
   const generateContent = () => {
@@ -29,17 +33,17 @@ const generateUsername = () =>
   };
   
   // Mock 資料生成函數
-  export const generateMockData = (count = 10) => {
-    return Array.from({ length: count }, (_, id) => ({
-      id: id + 1,
-      user: {
-        username: generateUsername(),
-        avatar: "/images/頭像.jpg",
-        location: generateLocation(),
-      },
-      content: generateContent(),
-      image: generateImage(),
-      isLiked: false,
-      isCollected: false,
-    }));
-  };  
+export const generateMockData = (count = 10) => {
+  return Array.from({ length: count }, (_, id) => ({
+    id: id + 1,
+    user: {
+      username: generateUsername(),
+      avatar: "/images/頭像.jpg",
+      location: generateLocation(),
+    },
+    content: generateContent(),
+    image: generateImages(), // 支持多張圖片
+    isLiked: false,
+    isCollected: false,
+  }));
+};

@@ -6,7 +6,6 @@
         <PhCaretLeft :size="24" />
       </router-link>
       <p class="w-full text-center text-lg">新增貼文</p>
-      <PhPaperPlaneTilt :size="24" class="absolute right-2" />
     </div>
 
     <!-- 輸入框 -->
@@ -55,6 +54,12 @@
         </p>
       </div>
     </div>
+    <div class="p-4">
+      <button class="btn btn-sm w-full">
+        <PhPaperPlaneTilt :size="16" />
+        新增
+      </button>
+    </div>
   </div>
 </template>
 
@@ -96,5 +101,15 @@ const handleFileUpload = (event) => {
 /* 提供額外樣式以提升使用者體驗 */
 input::placeholder {
   color: #c0c0c0;
+}
+
+/* 自定義滾動條隱藏 */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE 11 */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 </style>
