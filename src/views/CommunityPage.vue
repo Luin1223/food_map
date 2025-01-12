@@ -77,7 +77,9 @@
                   :style="{ color: post.isLiked ? '#CA2521' : 'inherit' }"
                 />
               </button>
+              <router-link to="/message">
               <PhChatCircle :size="20" class="ml-2" />
+              </router-link>
               <button @click="toggleCollect(post)" class="flex items-center">
                 <PhBookmarkSimple
                   :size="20"

@@ -38,18 +38,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import {PhX} from '@phosphor-icons/vue';
+import { ref, watch } from 'vue';
+import { PhX } from '@phosphor-icons/vue';
 
 const showCard = ref(false);
 </script>
 
 <style scoped>
-/* 可選樣式：增加過渡效果 */
-.v-enter-active, .v-leave-active {
-  transition: opacity 0.3s ease;
-}
-.v-enter-from, .v-leave-to {
-  opacity: 0;
-}
 </style>
