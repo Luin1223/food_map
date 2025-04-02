@@ -4,11 +4,13 @@
     <!-- 僅渲染 RouterView，跳過底部導航和內容限制 -->
     <RouterView />
   </div>
+  
 
   <!-- 一般頁面，使用固定佈局 -->
   <div v-else class="app-content pb-16">
     <RouterView />
   </div>
+  
 
   <!-- 固定的底部導航欄 -->
   <BottomNav v-if=" !noBottonNav.includes(route.name)" />
