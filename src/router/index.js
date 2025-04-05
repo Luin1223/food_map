@@ -8,6 +8,7 @@ import AddPostPage from '@/views/AddPostPage.vue';
 import ProfilePage from '@/views/ProfilePage.vue';
 import DeliciousPage from '@/views/DeliciousPage.vue';
 import MessagePage from '@/views/MessagePage.vue';
+import StoreDetail from '@/views/StoreDetail.vue';
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: '/message',
     name: 'MessagePage',
     component: MessagePage,
+  },
+  {
+    path: '/store/:id',
+    name: 'StoreDetail',
+    component: () => import('@/views/StoreDetail.vue')
   },
 ];
 

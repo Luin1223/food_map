@@ -68,8 +68,11 @@
               />
             </div>
           </div>
+
+          <!-- 貼文底部回饋 -->
           <div class="flex flex-row justify-between mt-2">
             <div class="flex flex-row">
+              <!-- 愛心 -->
               <button @click="toggleLike(post)" class="flex items-center">
                 <PhHeart
                   :size="20"
@@ -77,9 +80,13 @@
                   :style="{ color: post.isLiked ? '#CA2521' : 'inherit' }"
                 />
               </button>
+
+              <!-- 評論 -->
               <router-link to="/message">
               <PhChatCircle :size="20" class="ml-2" />
               </router-link>
+
+              <!-- 收藏 -->
               <button @click="toggleCollect(post)" class="flex items-center">
                 <PhBookmarkSimple
                   :size="20"
@@ -89,6 +96,8 @@
                 />
               </button>
             </div>
+
+            <!-- 轉發 -->
             <PhExport :size="20" />
           </div>
         </div>

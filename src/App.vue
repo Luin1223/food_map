@@ -24,7 +24,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 // 不需要底部導航的頁面名稱
-const noBottonNav = ['LoginPage', 'AddPostPage', 'ProfilePage', 'DeliciousPage','MessagePage'];
+const noBottonNav = ['LoginPage', 'AddPostPage', 'ProfilePage', 'DeliciousPage','MessagePage','StoreDetail'];
 
 // 完全跳過 App.vue 佈局的頁面名稱
 const noLayoutPages = ['HelpPage'];
