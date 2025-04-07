@@ -18,8 +18,15 @@
   
   <div class="p-4">
     
+    <div class="flex flex-row space-x-2 mb-4 items-center">
+    <!-- 篩選 -->
+      <div class="flex justify-between items-center">
+        <button @click="toggleFilter" class="text-gray-500">
+      <PhSliders :size="24" />
+        </button>
+      </div>
     <!-- #標籤 -->
-    <div class="flex space-x-2 mb-4">
+    <div class="flex space-x-2 overflow-x-auto" style="white-space: nowrap;">
       <button
         v-for="tag in tags"
         :key="tag"
@@ -31,6 +38,21 @@
       >
         #{{ tag }}
       </button>
+    </div>
+    </div>
+
+    <!-- 篩選版面 -->
+    <div v-if="isFilterVisible">
+    <div>
+      <label for="rating">評分範圍 </label>
+      <input type="range" id="rating" v-model="ratingRange" value="30" min="1" max="5" step="0.5" class="range range-info range-xs" />
+      <span>{{ ratingRange }} 星</span>
+    </div>
+    <div>
+      <label for="price">價格範圍 </label>
+      <input type="range" id="price" v-model="priceRange" value="30" min="0" max="1000" step="50" class="range range-info range-xs" />
+      <span>{{ priceRange }} 元</span>
+    </div>
     </div>
 
 
@@ -45,7 +67,7 @@
        >
        <router-link :to="`/store/${item.id}`" class="flex flex-row w-full">
         <!-- 圖片 -->
-        <img :src="item.image" alt="food image" class="w-40 h-24 object-cover rounded-lg">
+        <img :src="item.image" alt="food image" class="w-40 h-24 object-cover rounded-lg max-w-full">
 
         <!-- 店名 -->
         <div class="ml-3 flex-1">
@@ -53,7 +75,7 @@
             <h3 class="font-semibold text-lg">{{ item.name }}</h3>
           </div>
           <div class="text-sm text-gray-500 flex items-center space-x-1">
-            <span :class="item.isOpen ? 'text-green-500' : 'text-red-500'">●</span>
+            <span :class="item.open ? 'text-green-500' : 'text-red-500'">●</span>
             <span>{{ item.price }}</span>
           </div>
           <div class="text-sm text-gray-500">{{ item.distance }} km</div>
@@ -68,7 +90,7 @@
             :style="{ color: item.isCollected ? '#000000' : 'inherit' }"
           />
           </button>
-          <span class="font-bold text-lg ">{{ item.rating }}</span>
+          <span class="font-bold text-lg">{{ item.rating }}</span>
         </div>
       </div>
       </div>
@@ -76,29 +98,72 @@
 </template>
 
 <script setup>
-import {ref,computed} from 'vue';
-import {PhCaretLeft,PhMagnifyingGlass,PhBookmarkSimple} from '@phosphor-icons/vue';
+import {ref,computed,onMounted} from 'vue';
+import axios from 'axios';
+import {PhCaretLeft,PhMagnifyingGlass,PhBookmarkSimple,PhSliders} from '@phosphor-icons/vue';
+import { getRestaurants } from '@/services/api.js';
 
-const foodList = ref([
-  { id: 1, name: "牛肉麵好吃好吃好吃好吃",tag:"麵食", image: "/images/牛肉麵.jpg", isOpen: true, price: "$200-400", distance: "2.5", rating: 4.5,isCollected: false },
-  { id: 2, name: "排骨飯",tag:"飯類", image: "/images/牛肉麵.jpg", isOpen: false, price: "$200-400", distance: "2.5", rating: 4.6,isCollected: false },
-]);
-
-const tags = ref(["麵食", "飯類", "小吃"]);
+const foodList = ref([]);
+const tags = ref(["中式", "美式", "日式", "韓式", "法式", "泰式", "越式", "港式", "義式", "其他"]);
 const selectedTags = ref([]);
+const isFilterVisible = ref(false);
 
-const toggleTag = (tag) => {
-  if (selectedTags.value.includes(tag)) {
-    selectedTags.value = selectedTags.value.filter(t => t !== tag)
-  } else {
-    selectedTags.value.push(tag)
+const ratingRange = ref(3);
+const priceRange = ref(300);
+
+/*錯的
+const loadRestaurants = async () => {
+  try {
+    const response = await getRestaurants();
+    foodList.value = response; 
+  } catch (error) {
+    console.error('無法載入餐廳資料', error);
+    // 可以在这里添加用户提示，比如使用Toast或Alert
+  }
+};*/
+
+const loadRestaurants = async () => {
+  try {
+    const response = await getRestaurants();
+    console.log(response.data);  // 檢查返回的資料
+    foodList.value = response.data;
+  } catch (error) {
+    console.error('無法載入餐廳資料', error);
   }
 };
 
-const filteredFoods = computed(() => {
-  if(selectedTags.value.length === 0) return foodList.value;
-  return foodList.value.filter(food => selectedTags.value.includes(food.tag));
+// 頁面載入時呼叫
+onMounted(() => {
+  loadRestaurants();
 });
+
+// 篩選條件
+const toggleTag = (tag) => {
+  if (selectedTags.value.includes(tag)) {
+    selectedTags.value = selectedTags.value.filter(t => t !== tag);
+  } else {
+    selectedTags.value.push(tag);
+  }
+};
+
+const toggleFilter = () => {
+  isFilterVisible.value = !isFilterVisible.value;
+};
+
+const filteredFoods = computed(() => {
+  return (foodList.value || [])
+    .filter(item =>
+      (item.rating >= ratingRange.value) &&
+      (parsePrice(item.price) <= priceRange.value) &&
+      (selectedTags.value.length === 0 || selectedTags.value.includes(item.tag))
+    );
+});
+
+const parsePrice = (price) => {
+  const priceRange = price.replace('$', '').split('-');
+  const minPrice = parseInt(priceRange[0]);
+  return minPrice;
+};
 
 const toggleCollect = (item) => {
   item.isCollected = !item.isCollected;
@@ -106,5 +171,13 @@ const toggleCollect = (item) => {
 </script>
 
 <style scoped>
-/* 可選樣式 */
+  /* 隱藏滾動條 */
+  .flex {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .flex::-webkit-scrollbar {
+    display: none;  /* 隱藏滾動條 */
+  }
 </style>
