@@ -10,12 +10,12 @@
       <!-- 假設你從 API 拿店家詳細資訊 -->
       <h1 class="text-2xl font-bold">{{ store.name }}</h1>
       <img :src="store.image" class="w-full rounded-lg mt-2" />
-      <p class="text-gray-500 mt-2">{{ store.description }}</p>
+      <p class="text-gray-500 mt-2">{{ store.address }}</p>
     </div>
 
     <!-- 導航按鈕 -->
     <div class="fixed bottom-5 left-0 right-0 flex justify-center">
-      <a :href="`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`"
+      <a :href="`https://www.google.com/maps/dir/?api=1&destination=${store.latitude},${store.longitude}`"
          target="_blank"
          class="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg">
         導航至店家
@@ -27,21 +27,26 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import axios from 'axios'
 import {PhCaretLeft} from '@phosphor-icons/vue'
+import {getRestaurantsById} from '@/services/api.js'
 
-const route = useRoute()
 const store = ref({})
+const route = useRoute();
+const id = route.params.id;
 
-onMounted(() => {
-  const id = route.params.id
-  // 模擬取得資料
-  store.value = {
-    id,
-    name: '牛肉麵好吃',
-    image: '/images/牛肉麵.jpg',
-    description: '這是一家好吃的牛肉麵店',
-    lat: 25.034, // 店家緯度
-    lng: 121.562 // 店家經度
+const loadRestaurantsById = async () => {
+  try {
+    const response = await getRestaurantsById(id);
+    console.log(response.data);  // 檢查返回的資料
+    store.value = response.data;
+  } catch (error) {
+    console.error('無法載入餐廳資料', error);
   }
-})
+};
+
+// 頁面載入時呼叫
+onMounted(() => {
+  loadRestaurantsById();
+});
 </script>

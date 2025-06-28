@@ -19,7 +19,7 @@ export default defineConfig({
     host: true, // 允許區域網路訪問
     port: 3000,  // 設置你希望使用的端口
     proxy: {
-      '/api': 'http://localhost:8081'
+      '/api': 'http://localhost:8080'
     }
   }
 })

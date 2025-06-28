@@ -23,15 +23,15 @@ const isActive = (path) => route.path === path;
       </li>
       <!-- 地圖 -->
       <li>
-        <router-link to="/map" class="flex flex-col items-center text-center">
+        <router-link to="/" class="flex flex-col items-center text-center">
           <PhMapPin 
           :size="24"
-          :weight="isActive('/map') ? 'fill' : 'regular'"
-          :style="{ color: isActive('/map') ? '#ECA442' : 'black' }" />
+          :weight="isActive('/') ? 'fill' : 'regular'"
+          :style="{ color: isActive('/') ? '#ECA442' : 'black' }" />
           <span>地圖</span>
         </router-link>
       </li>
-      <!-- 社群 -->
+    <!--社群
       <li>
         <router-link to="/community" class="flex flex-col items-center text-center">
           <PhCheers 
@@ -41,6 +41,7 @@ const isActive = (path) => route.path === path;
           <span>社群</span>
         </router-link>
       </li>
+    -->
       <!-- 設定 -->
       <li>
         <router-link to="/settings" class="flex flex-col items-center text-center">

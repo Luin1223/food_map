@@ -3,7 +3,7 @@
     <div class="flex items-center justify-center space-x-3 px-4">
       
       <!-- 返回鍵 -->
-      <router-link to="/map" class="text-black">
+      <router-link to="/" class="text-black">
         <PhCaretLeft :size="24" />
       </router-link>
 

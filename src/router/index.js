@@ -9,17 +9,19 @@ import ProfilePage from '@/views/ProfilePage.vue';
 import DeliciousPage from '@/views/DeliciousPage.vue';
 import MessagePage from '@/views/MessagePage.vue';
 import StoreDetail from '@/views/StoreDetail.vue';
+import LineCallback from '@/views/LineCallback.vue';
+import CollectPage from '@/views/CollectPage.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'LoginPage',
-    component: LoginPage,
-  },
-  {
-    path: '/map',
     name: 'MapPage',
     component: MapPage,
+  },
+  {
+    path: '/login',
+    name: 'LoginPage',
+    component: LoginPage,
   },
   {
     path: '/community',
@@ -60,6 +62,16 @@ const routes = [
     path: '/store/:id',
     name: 'StoreDetail',
     component: () => import('@/views/StoreDetail.vue')
+  },
+  {
+    path: '/line-callback',
+    name: 'LineCallback',
+    component: () => import('@/views/LineCallback.vue')
+  },
+  {
+    path:'/collect',
+    name: 'CollectPage',
+    component:CollectPage,
   },
 ];
 

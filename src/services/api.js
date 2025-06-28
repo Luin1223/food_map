@@ -1,17 +1,31 @@
 import axios from 'axios';
 
-const username = import.meta.env.VITE_API_USERNAME;
-const password = import.meta.env.VITE_API_PASSWORD;
-const authHeader = 'Basic ' + btoa(`${username}:${password}`);
-
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL, //我的API基礎路徑
+  withCredentials: true, //後端有設cookie驗證，這裡會保留cookie
   headers: {
-    'Authorization': authHeader,
     'Content-Type': 'application/json'
   }
 });
 
-export const getRestaurants = async () => {
-  return apiClient.get('/api/restaurants');
+//每次發送請求之前都會執行這段
+//設定請求攔截器(自動加JWT)
+apiClient.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+//封裝API請求
+export const getRestaurants = () => {
+  return apiClient.get('/restaurants');
+};
+
+export const getRestaurantsById = async (id) => {
+  if (!id) {
+    throw new Error('餐廳 ID 無效');
+  }
+  return apiClient.get(`/restaurants/${id}`);
 };
