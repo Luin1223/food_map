@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, //我的API基礎路徑
-  withCredentials: true, //後端有設cookie驗證，這裡會保留cookie
+  withCredentials: false, //後端有設cookie驗證，這裡會保留cookie
   headers: {
     'Content-Type': 'application/json'
   }
@@ -28,4 +28,17 @@ export const getRestaurantsById = async (id) => {
     throw new Error('餐廳 ID 無效');
   }
   return apiClient.get(`/restaurants/${id}`);
+};
+
+// 收藏相關
+export const getFavorites = () => {
+  return apiClient.get('/favorites');
+};
+
+export const addFavorite = (id) => {
+  return apiClient.post(`/favorites/${id}`);
+};
+
+export const removeFavorite = (id) => {
+  return apiClient.delete(`/favorites/${id}`);
 };

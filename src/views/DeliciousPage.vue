@@ -2,142 +2,142 @@
   <div class="w-full mt-5">
     <div class="flex items-center justify-center space-x-3 px-4">
       
-      <!-- 返回鍵 -->
       <router-link to="/" class="text-black">
         <PhCaretLeft :size="24" />
       </router-link>
 
-      <!-- 搜尋框 -->
       <label class="flex items-center space-x-2 bg-white px-4 py-2 shadow-md border border-gray-300 rounded-full w-full">
         <PhMagnifyingGlass :size="20" />
-        <input type="search" class="grow outline-none" placeholder="Search" />
+        <input 
+          type="search" 
+          v-model="searchQuery" 
+          class="grow outline-none" 
+          placeholder="搜尋餐廳名稱或類別..." 
+        />
       </label>
     </div>
   </div>
 
-  
   <div class="p-4">
-    
     <div class="flex flex-row space-x-2 mb-4 items-center">
-    <!-- 篩選 -->
       <div class="flex justify-between items-center">
-        <button @click="toggleFilter" class="text-gray-500">
-      <PhSliders :size="24" />
+        <button @click="toggleFilter" class="text-gray-500 hover:text-black transition">
+          <PhSliders :size="24" />
         </button>
       </div>
-    <!-- #標籤 -->
-    <div class="flex space-x-2 overflow-x-auto" style="white-space: nowrap;">
-      <button
-        v-for="tag in tags"
-        :key="tag"
-        @click="toggleTag(tag)"
-        :class="[
-          'px-3 py-1 rounded-lg border',
-          selectedTags.includes(tag) ? 'bg-gray-300' : 'bg-white'
-        ]"
-      >
-        #{{ tag }}
-      </button>
-    </div>
-    </div>
-
-    <!-- 篩選版面 -->
-    <div v-if="isFilterVisible">
-    <div>
-      <label for="rating">評分範圍 </label>
-      <input type="range" id="rating" v-model="ratingRange" value="30" min="1" max="5" step="0.5" class="range range-info range-xs" />
-      <span>{{ ratingRange }} 星</span>
-    </div>
-    <div>
-      <label for="price">價格範圍 </label>
-      <input type="range" id="price" v-model="priceRange" value="30" min="0" max="1000" step="50" class="range range-info range-xs" />
-      <span>{{ priceRange }} 元</span>
-    </div>
+      
+      <div class="flex space-x-2 overflow-x-auto no-scrollbar" style="white-space: nowrap;">
+        <button
+          v-for="tag in tags"
+          :key="tag"
+          @click="toggleTag(tag)"
+          :class="[
+            'px-3 py-1 rounded-lg border transition-colors duration-200',
+            selectedTags.includes(tag) ? 'bg-gray-800 text-white border-gray-800' : 'bg-white border-gray-200 text-gray-700'
+          ]"
+        >
+          #{{ tag }}
+        </button>
+      </div>
     </div>
 
+    <div v-if="isFilterVisible" class="bg-gray-50 p-3 rounded-lg mb-4 border border-gray-100 shadow-sm">
+      <div class="mb-2">
+        <label for="rating" class="text-sm text-gray-600 block mb-1">最低評分: {{ ratingRange }} 星</label>
+        <input type="range" id="rating" v-model="ratingRange" min="1" max="5" step="0.5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm" />
+      </div>
+      <div>
+        <label for="price" class="text-sm text-gray-600 block mb-1">最高價格: {{ priceRange }} 元</label>
+        <input type="range" id="price" v-model="priceRange" min="0" max="1000" step="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm" />
+      </div>
+    </div>
 
-    <!-- 卡片 -->
     <div class="space-y-4 mt-3">
       
-      <div
-       v-for="item in filteredFoods"
-       :key="item.id"
-       :to="`/store/${item.id}`"
-       class="block bg-white shadow-md rounded-xl overflow-hidden flex p-4"
-       >
-       <router-link :to="`/store/${item.id}`" class="flex flex-row w-full">
-        <!-- 圖片 -->
-        <img :src="item.image" alt="food image" class="w-40 h-24 object-cover rounded-lg max-w-full">
-
-        <!-- 店名 -->
-        <div class="ml-3 flex-1">
-          <div class="flex justify-between">
-            <h3 class="font-semibold text-lg">{{ item.name }}</h3>
-          </div>
-          <div class="text-sm text-gray-500 flex items-center space-x-1">
-            <span :class="item.open ? 'text-green-500' : 'text-red-500'">●</span>
-            <span>{{ item.price }}</span>
-          </div>
-          <div class="text-sm text-gray-500">{{ item.distance }} km</div>
-        </div>
-       </router-link>
-        <!-- 評分 -->
-        <div class="flex flex-col items-center justify-between ml-auto">
-          <button @click.stop="toggleCollect(item)" class="text-gray-500">
-          <PhBookmarkSimple 
-            :size="20" 
-            :weight="item.isCollected ? 'fill' : 'regular'"
-            :style="{ color: item.isCollected ? '#000000' : 'inherit' }"
-          />
-          </button>
-          <span class="font-bold text-lg">{{ item.rating }}</span>
-        </div>
+      <div v-if="filteredFoods.length === 0" class="text-center text-gray-500 mt-10 py-10">
+        <p class="text-lg font-medium">找不到符合的餐廳 😕</p>
+        <p class="text-sm mt-1">試試看調整搜尋關鍵字或篩選條件</p>
       </div>
+
+      <div
+        v-for="item in filteredFoods"
+        :key="item.id"
+        class="block bg-white shadow-md rounded-xl overflow-hidden flex p-4 relative hover:shadow-lg transition-shadow duration-300"
+      >
+        <router-link :to="`/store/${item.id}`" class="flex flex-row w-full">
+          <img :src="item.image" alt="food image" class="w-40 h-24 object-cover rounded-lg bg-gray-200">
+
+          <div class="ml-3 flex-1 pr-8">
+            <div class="flex justify-between">
+              <h3 class="font-semibold text-lg line-clamp-1">{{ item.name }}</h3>
+            </div>
+            <div class="text-sm text-gray-500 flex items-center space-x-1 mt-1">
+              <span :class="item.open ? 'text-green-500' : 'text-red-500'">●</span>
+              <span>{{ item.price }}</span>
+            </div>
+            <div class="text-sm text-gray-500 mt-1">{{ item.distance }} km</div>
+          </div>
+        </router-link>
+        
+        <div class="flex flex-col items-end justify-between ml-auto absolute right-4 top-4 bottom-4">
+          <button @click.stop="toggleCollect(item)" class="text-gray-500 hover:scale-110 transition-transform">
+            <PhBookmarkSimple 
+              :size="24" 
+              :weight="item.isCollected ? 'fill' : 'regular'"
+              :style="{ color: item.isCollected ? '#000000' : 'inherit' }"
+            />
+          </button>
+          <span class="font-bold text-lg text-yellow-500 flex items-center">
+             {{ item.rating }} <span class="text-xs text-gray-400 ml-1">★</span>
+          </span>
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
-import {ref,computed,onMounted} from 'vue';
-import axios from 'axios';
-import {PhCaretLeft,PhMagnifyingGlass,PhBookmarkSimple,PhSliders} from '@phosphor-icons/vue';
-import { getRestaurants } from '@/services/api.js';
+import { ref, computed, onMounted } from 'vue';
+import { PhCaretLeft, PhMagnifyingGlass, PhBookmarkSimple, PhSliders } from '@phosphor-icons/vue';
+import { getRestaurants, getFavorites, addFavorite, removeFavorite } from '@/services/api.js';
 
 const foodList = ref([]);
 const tags = ref(["中式", "美式", "日式", "韓式", "法式", "泰式", "越式", "港式", "義式", "其他"]);
 const selectedTags = ref([]);
 const isFilterVisible = ref(false);
 
-const ratingRange = ref(3);
-const priceRange = ref(300);
+// 搜尋與篩選狀態
+const searchQuery = ref(""); // 新增搜尋字串狀態
+const ratingRange = ref(0); // 預設 0 代表不篩選評分
+const priceRange = ref(1000); // 預設 1000 代表顯示所有價格
 
-/*錯的
+// 載入餐廳與收藏狀態
 const loadRestaurants = async () => {
   try {
-    const response = await getRestaurants();
-    foodList.value = response; 
-  } catch (error) {
-    console.error('無法載入餐廳資料', error);
-    // 可以在这里添加用户提示，比如使用Toast或Alert
-  }
-};*/
+    // 使用 Promise.all 平行請求，提升速度
+    const [restaurantRes, favoriteRes] = await Promise.all([
+      getRestaurants(),
+      getFavorites()
+    ]);
 
-const loadRestaurants = async () => {
-  try {
-    const response = await getRestaurants();
-    console.log(response.data);  // 檢查返回的資料
-    foodList.value = response.data;
+    // 建立一個 Set 來快速查找已收藏的 ID
+    const favoriteIds = new Set(favoriteRes.data.map(r => r.id));
+
+    // 合併資料
+    foodList.value = restaurantRes.data.map(item => ({
+      ...item,
+      isCollected: favoriteIds.has(item.id)
+    }));
   } catch (error) {
     console.error('無法載入餐廳資料', error);
   }
 };
 
-// 頁面載入時呼叫
 onMounted(() => {
   loadRestaurants();
 });
 
-// 篩選條件
+// UI 操作邏輯
 const toggleTag = (tag) => {
   if (selectedTags.value.includes(tag)) {
     selectedTags.value = selectedTags.value.filter(t => t !== tag);
@@ -150,34 +150,64 @@ const toggleFilter = () => {
   isFilterVisible.value = !isFilterVisible.value;
 };
 
-const filteredFoods = computed(() => {
-  return (foodList.value || [])
-    .filter(item =>
-      (item.rating >= ratingRange.value) &&
-      (parsePrice(item.price) <= priceRange.value) &&
-      (selectedTags.value.length === 0 || selectedTags.value.includes(item.tag))
-    );
-});
-
-const parsePrice = (price) => {
-  const priceRange = price.replace('$', '').split('-');
-  const minPrice = parseInt(priceRange[0]);
-  return minPrice;
+// 價格解析工具
+const parsePrice = (priceStr) => {
+  if (!priceStr) return 0;
+  // 處理 "$100-200" 變為 100，或是 "$150" 變為 150
+  const cleanPrice = priceStr.replace('$', '').replace(/,/g, ''); 
+  const parts = cleanPrice.split('-');
+  return parseInt(parts[0]) || 0;
 };
 
-const toggleCollect = (item) => {
-  item.isCollected = !item.isCollected;
+// 核心篩選邏輯 (搜尋 + 標籤 + 價格 + 評分)
+const filteredFoods = computed(() => {
+  return (foodList.value || []).filter(item => {
+    // 1. 搜尋 (比對店名 OR 標籤)
+    const query = searchQuery.value.toLowerCase().trim();
+    const matchSearch = query === "" || 
+                        item.name.toLowerCase().includes(query) || 
+                        item.tag.includes(query);
+
+    // 2. 評分 (大於等於設定值)
+    const matchRating = item.rating >= ratingRange.value;
+
+    // 3. 價格 (小於等於設定值)
+    const matchPrice = parsePrice(item.price) <= priceRange.value;
+
+    // 4. 標籤篩選 (若沒選標籤則全部顯示，有選則需包含)
+    const matchTags = selectedTags.value.length === 0 || selectedTags.value.includes(item.tag);
+
+    return matchSearch && matchRating && matchPrice && matchTags;
+  });
+});
+
+// 收藏功能
+const toggleCollect = async (item) => {
+  try {
+    // 樂觀更新 UI (Optimistic UI)：先改狀態讓使用者覺得很快，背景再發請求
+    item.isCollected = !item.isCollected;
+
+    if (!item.isCollected) {
+      await removeFavorite(item.id); // 原本是 collected 現在變成 false -> 移除
+    } else {
+      await addFavorite(item.id); // 原本是 false 現在變成 collected -> 加入
+    }
+  } catch (err) {
+    console.error('收藏操作失敗', err);
+    // 如果失敗了，把狀態改回來
+    item.isCollected = !item.isCollected;
+    alert("操作失敗，請檢查網路連線");
+  }
 };
 </script>
 
 <style scoped>
-  /* 隱藏滾動條 */
-  .flex {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
-  }
-  
-  .flex::-webkit-scrollbar {
-    display: none;  /* 隱藏滾動條 */
-  }
+/* 隱藏 Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 </style>

@@ -64,6 +64,8 @@ const routes = [
     component: () => import('@/views/StoreDetail.vue')
   },
   {
+    // ★ 這裡是關鍵：路徑必須跟 LINE Developer Console 設定的 Redirect URI 一致
+    // Redirect URI 是 http://localhost:3000/line-callback
     path: '/line-callback',
     name: 'LineCallback',
     component: () => import('@/views/LineCallback.vue')
