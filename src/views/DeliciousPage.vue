@@ -98,6 +98,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { PhCaretLeft, PhMagnifyingGlass, PhBookmarkSimple, PhSliders } from '@phosphor-icons/vue';
 import { getRestaurants, getFavorites, addFavorite, removeFavorite } from '@/services/api.js';
 
@@ -105,6 +106,7 @@ const foodList = ref([]);
 const tags = ref(["中式", "美式", "日式", "韓式", "法式", "泰式", "越式", "港式", "義式", "其他"]);
 const selectedTags = ref([]);
 const isFilterVisible = ref(false);
+const router = useRouter();
 
 // 搜尋與篩選狀態
 const searchQuery = ref(""); // 新增搜尋字串狀態
@@ -114,18 +116,27 @@ const priceRange = ref(1000); // 預設 1000 代表顯示所有價格
 // 載入餐廳與收藏狀態
 const loadRestaurants = async () => {
   try {
-    // 使用 Promise.all 平行請求，提升速度
-    const [restaurantRes, favoriteRes] = await Promise.all([
-      getRestaurants(),
-      getFavorites()
-    ]);
+    const token = localStorage.getItem('token');
+    
+    // 定義要發送的請求陣列
+    const promises = [getRestaurants()];
+    
+    // ★ 關鍵：只有在有 Token (已登入) 的時候，才去抓收藏列表
+    if (token) {
+      promises.push(getFavorites());
+    }
 
-    // 建立一個 Set 來快速查找已收藏的 ID
+    const results = await Promise.all(promises);
+    const restaurantRes = results[0];
+    
+    // 如果有抓收藏列表，results[1] 才有東西，否則給空陣列
+    const favoriteRes = token ? results[1] : { data: [] };
+
     const favoriteIds = new Set(favoriteRes.data.map(r => r.id));
 
-    // 合併資料
     foodList.value = restaurantRes.data.map(item => ({
       ...item,
+      // 訪客永遠是 false (未收藏)
       isCollected: favoriteIds.has(item.id)
     }));
   } catch (error) {
@@ -183,20 +194,30 @@ const filteredFoods = computed(() => {
 
 // 收藏功能
 const toggleCollect = async (item) => {
-  try {
-    // 樂觀更新 UI (Optimistic UI)：先改狀態讓使用者覺得很快，背景再發請求
-    item.isCollected = !item.isCollected;
+  // ★ 關鍵：檢查是否登入
+  const token = localStorage.getItem('token');
+  
+  if (!token) {
+    // 沒登入 -> 詢問是否去登入
+    const confirmLogin = confirm("訪客無法使用收藏功能，是否前往登入？");
+    if (confirmLogin) {
+      router.push('/login'); // 導向登入頁
+    }
+    return; // 中斷執行，不發送 API
+  }
 
+  // ... 以下維持原本的 API 呼叫邏輯 ...
+  try {
+    // 樂觀更新
+    item.isCollected = !item.isCollected;
     if (!item.isCollected) {
-      await removeFavorite(item.id); // 原本是 collected 現在變成 false -> 移除
+      await removeFavorite(item.id);
     } else {
-      await addFavorite(item.id); // 原本是 false 現在變成 collected -> 加入
+      await addFavorite(item.id);
     }
   } catch (err) {
-    console.error('收藏操作失敗', err);
-    // 如果失敗了，把狀態改回來
     item.isCollected = !item.isCollected;
-    alert("操作失敗，請檢查網路連線");
+    alert("操作失敗");
   }
 };
 </script>

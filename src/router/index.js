@@ -71,10 +71,21 @@ const routes = [
     component: () => import('@/views/LineCallback.vue')
   },
   {
-    path:'/collect',
-    name: 'CollectPage',
-    component:CollectPage,
-  },
+      path:'/collect',
+      name: 'CollectPage',
+      component: () => import('../views/CollectPage.vue'),
+      // ★ 關鍵：加入路由守衛
+      beforeEnter: (to, from, next) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          next(); // 有票，放行
+        } else {
+          // 沒票，強制踢回登入頁
+          alert("請先登入以查看收藏！"); // 可選
+          next('/login'); 
+        }
+      }
+    },
 ];
 
 const router = createRouter({

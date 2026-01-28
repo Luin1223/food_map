@@ -17,7 +17,15 @@ const loginWithApple = () => {
 };
 
 const loginAsGuest = () => {
-  router.push({ name: 'MapPage' });
+  // 1. 清除瀏覽器裡的 Token
+  localStorage.removeItem('token');
+  
+  // 2. 清除 Pinia 裡的使用者狀態 (如果有寫 reset 方法最好，沒有就手動清)
+  userStore.$reset(); // 如果您有用 Pinia 的 setup syntax，可能要手動賦值 null
+  // 或者: userStore.setUser(null); 
+  
+  console.log("已清除使用者資料，以訪客身分進入");
+  router.push({ name: 'MapPage' }); // 跳轉到地圖或列表
 };
 
 const client_id = import.meta.env.VITE_LINE_LOGIN_CHANNEL_ID;
